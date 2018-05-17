@@ -602,15 +602,17 @@
                       <v-stepper-content step="4">
                         <v-container align-content-center>
                           <v-layout row>
-                            <v-flex xs8 offset-xs2 class="text-xs-center">
+                            <v-flex xs12 class="text-xs-center">
                               <img src="~/assets/images/suitcase.png" alt="suitcase" class="mx-auto">
                             </v-flex>
                           </v-layout>
                           <v-layout row wrap>
-                            <v-flex offset-xs2 class="text-xs-center">
-                              <v-subheader>
+                            <v-flex xs12 class="text-xs-center">
+                              <h5
+                                class="body-1 text-xs-center my-3"
+                              >
                                 You're one step closer towards your {{ goal.name }}.
-                              </v-subheader>
+                              </h5>
                             </v-flex>
                           </v-layout>
                           <v-layout row wrap>
