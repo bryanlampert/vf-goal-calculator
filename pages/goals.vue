@@ -73,6 +73,7 @@
                     v-model="valueDeterminate"
                     background-color="white"
                     v-if="step <= 3"
+                    :gradient="gradient"
                   >
                   </v-progress-linear>
                   <v-stepper-items>
@@ -716,6 +717,7 @@
       stepOneValid: false,
       stepTwoValid: false,
       stepThreeValid: false,
+      gradient: 'to right, #3687c6 , #56c2cb',
       types: [
         'Adventure',
         'All Inclusive',
@@ -833,7 +835,9 @@
       }
     },
     mounted: function () {
-      this.$store.commit('toggleDialog')
+      if (this.$store.state.dialog === false) {
+        this.$store.commit('toggleDialog')
+      }
     },
     computed: {
       goals: function () {
