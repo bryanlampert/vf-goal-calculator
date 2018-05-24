@@ -1,17 +1,13 @@
 export const state = () => ({
-  goals: [],
-  dialog: false
+  dialog: false,
+  addGoal: false
 })
 
 export const mutations = {
-  addGoal: (state, payload) => {
-    state.goals.push(payload)
-  },
   toggleDialog (state) {
     state.dialog = !state.dialog
+  },
+  toggleAddGoal (state) {
+    state.addGoal = !state.addGoal
   }
-}
-
-export const getters = {
-  goals: state => state.goals
 }

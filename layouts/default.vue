@@ -4,6 +4,7 @@
       fixed
       permanent
       app
+      absolute
       class="primary"
       id="nav"
     >
@@ -15,13 +16,17 @@
               </v-list-tile-content>
           </v-list-tile>
         </a>
+      </v-list>
+      <v-list two-line>
         <v-list-tile
           router
           :to="item.to"
           :key="i"
           v-for="(item, i) in items"
           exact
-          id="nav-list"
+          nuxt
+          class="navList"
+          active-class="navList activeLink"
         >
           <v-list-tile-action>
             <v-icon medium color="white" v-html="item.icon"></v-icon>
@@ -72,8 +77,8 @@
   }
 </script>
 
-<style scoped>
-#nav-list.primary--text {
+<style lang="scss" scoped>
+.navList.primary--text {
   padding: 20px;
   height: 100%;
 }
@@ -100,6 +105,13 @@
 }
 #nav {
   width: 250px !important;
+}
+.list__tile--active .list__tile__action:first-of-type .icon {
+  color: #56c2cb !important;
+}
+.navList.activeLink.list__tile--active{
+  border-left: 5px solid #56c2cb !important;
+  background: rgba(0, 0, 0, .12) !important;
 }
 </style>
 

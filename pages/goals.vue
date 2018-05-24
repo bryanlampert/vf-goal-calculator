@@ -40,7 +40,7 @@
                       flat
                       medium
                       @click.native="prevStep"
-                      v-if="step > 1"
+                      v-if="step > 1 && step < 4"
                     >
                       <div class="text-xs-center">
                         <v-icon>keyboard_arrow_left</v-icon>
@@ -62,11 +62,28 @@
                       <span class="text-xs-center" v-if="step == 4">CONGRATS, YOUR GOAL HAS BEEN SAVED!</span>
                     </span>
                     <v-spacer></v-spacer>
-                    <v-btn fab flat small @click.native="toggleDialog">
+                    <v-btn fab flat small @click.native.stop="confirmClose = true" v-if="step < 4">
                       <div class="text-xs-center">
                         <v-icon light>clear</v-icon>
                       </div>
                     </v-btn>
+                    <v-dialog v-model="confirmClose" persistent max-width="250">
+                      <v-card>
+                        <v-card-title class="headline text-xs-center mx-auto">
+                          Are you sure you would like to close?
+                        </v-card-title>
+                        <v-card-text class="text-xs-center">All current data will be lost</v-card-text>
+                        <v-card-actions class="text-xs-center">
+                          <v-btn color="secondary" round @click.native="toggleDialog">
+                            Yes
+                          </v-btn>
+                          <v-spacer></v-spacer>
+                          <v-btn color="secondary" round @click.native="confirmClose = false">
+                            No
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </v-stepper-header>
                   <v-divider></v-divider>
                   <v-progress-linear
@@ -445,6 +462,7 @@
                                             type="file"
                                             @change="onImageSelected"
                                             class="mt-1 inputFile"
+                                            accept="image/*"
                                           >
                                           <img src="~/assets/images/upload.png" contain alt="upload">
                                           <br>
@@ -714,11 +732,13 @@
         monthly: null,
         weeksRemaining: null
       },
+      confirmClose: false,
       valueDeterminate: 33.34,
       step: 1,
       stepOneValid: false,
       stepTwoValid: false,
       stepThreeValid: false,
+      goals: [],
       gradient: 'to right, #3687c6 , #56c2cb',
       types: [
         'Adventure',
@@ -737,6 +757,10 @@
     methods: {
       toggleDialog () {
         this.$store.commit('toggleDialog')
+        if (this.confirmClose) {
+          this.clearData()
+          this.confirmClose = !this.confirmClose
+        }
       },
       nextStep () {
         if (this.step === 1 && this.$refs.form1.validate()) {
@@ -793,8 +817,12 @@
       submit () {
         let i = this.goals.length
         this.goal.index = i + 1
-        this.$store.commit('addGoal', this.goal)
+        this.goals.push(this.goal)
+        localStorage.setItem('goals', JSON.stringify(this.goals))
         this.$store.commit('toggleDialog')
+        this.clearData()
+      },
+      clearData () {
         this.goal = {
           index: null,
           name: null,
@@ -836,15 +864,17 @@
         this.stepThreeValid = false
       }
     },
-    mounted: function () {
-      if (this.$store.state.dialog === false) {
+    created: function () {
+      console.log(this.$store.state.addGoal === true)
+      if (this.$store.state.addGoal === true) {
         this.$store.commit('toggleDialog')
+        this.$store.commit('toggleAddGoal')
       }
     },
+    mounted: function () {
+      this.goals = localStorage.getItem('goals') ? JSON.parse(localStorage.getItem('goals')) : []
+    },
     computed: {
-      goals: function () {
-        return this.$store.getters.goals
-      },
       dialog: function () {
         return this.$store.state.dialog
       },

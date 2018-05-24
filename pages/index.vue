@@ -17,8 +17,9 @@
               round
               class="white--text"
               id="goal-button"
-              href="/goals"
-              @click.native="toggleDialog"
+              nuxt
+              to="/goals"
+              @click.native="toggleAddGoal"
             >
               + Add a Goal
             </v-btn>
@@ -31,13 +32,8 @@
 <script>
 export default {
   methods: {
-    toggleDialog () {
-      this.$store.commit('toggleDialog')
-    }
-  },
-  computed: {
-    dialog: function () {
-      return this.$store.state.dialog
+    toggleAddGoal () {
+      this.$store.commit('toggleAddGoal')
     }
   }
 }
